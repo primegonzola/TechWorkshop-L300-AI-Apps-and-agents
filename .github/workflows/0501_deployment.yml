@@ -37,5 +37,6 @@ jobs:
       - name: Build and push Docker image
         run: |
           cd src/
+          docker login -u ${{ secrets.AZURE_CONTAINER_REGISTRY_USERNAME }} -p ${{ secrets.AZURE_CONTAINER_REGISTRY_PASSWORD }} ${{ secrets.AZURE_CONTAINER_REGISTRY }}.azurecr.io
           docker build -t ${{ secrets.AZURE_CONTAINER_REGISTRY }}/chat-app:latest .
           docker push ${{ secrets.AZURE_CONTAINER_REGISTRY }}/chat-app:latest
