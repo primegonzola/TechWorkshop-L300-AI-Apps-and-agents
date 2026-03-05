@@ -27,12 +27,19 @@ jobs:
         env:
           ENV: ${{ secrets.ENV }}
 
-      - name: Log in to Azure Container Registry
-        uses: azure/docker-login@v1
+      # - name: Log in to Azure Container Registry
+      #   uses: azure/docker-login@v1
+      #   with:
+      #     login-server: ${{ secrets.AZURE_CONTAINER_REGISTRY }}
+      #     username: ${{ secrets.AZURE_CONTAINER_REGISTRY_USERNAME }}
+      #     password: ${{ secrets.AZURE_CONTAINER_REGISTRY_PASSWORD }}
+
+      - name: Login into registry using azure cli
+        uses: azure/cli@v1
         with:
-          login-server: ${{ secrets.AZURE_CONTAINER_REGISTRY }}
-          username: ${{ secrets.AZURE_CONTAINER_REGISTRY_USERNAME }}
-          password: ${{ secrets.AZURE_CONTAINER_REGISTRY_PASSWORD }}
+          azcliversion: 2.0.81
+          inlineScript: |
+            az acr login --name ${{ env.AZURE_CONTAINER_REGISTRY }} -u ${{ secrets.AZURE_CONTAINER_REGISTRY_USERNAME }} -p ${{ secrets.AZURE_CONTAINER_REGISTRY_PASSWORD }}
 
       - name: Build and push Docker image
         run: |
